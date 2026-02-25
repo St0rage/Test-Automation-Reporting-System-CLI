@@ -1,0 +1,4 @@
+{
+  "main": "dist/tars-cli.js",
+  "output": "tars-cli.blob"
+}
