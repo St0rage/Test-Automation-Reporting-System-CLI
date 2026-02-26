@@ -34,7 +34,7 @@ export class ReportValidation {
     stepNumber: z.number().positive(),
     title: z.string().min(3).max(80),
     description: z.string().min(3),
-    image: z.string().max(50),
+    image: z.string(),
     status: z.string().refine((val) => ["done", "passed", "failed"].includes(val.toLowerCase()), {
       message: "status must be one of : DONE, PASSED, FAILED",
     }),
