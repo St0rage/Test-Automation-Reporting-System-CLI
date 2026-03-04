@@ -2,9 +2,9 @@ import { mkdir, readFile, writeFile } from "fs/promises";
 import { imageSize } from "image-size";
 import { jsPDF } from "jspdf";
 import autoTable, { CellHookData } from "jspdf-autotable";
-import moment from "moment";
 import path from "path";
 import { ReportData, SectionData } from "../model/model";
+import dayjs from "dayjs";
 
 type CoverData = {
   projectName: string;
@@ -380,7 +380,7 @@ export class ReportBuilder {
     const headerImageHeight = 7;
     const headerRightText = "Automation Test Execution Document";
     const footerPosition = 8;
-    const footerLeftText = `Copyright © (${moment().year()}) by BNI-APS. Testing Strategy Execution Form`;
+    const footerLeftText = `Copyright © (${dayjs().year()}) by BNI-APS. Testing Strategy Execution Form`;
     const footerRightText = `Page ${this.page} of ${totalPage}`;
 
     // Add Page
@@ -1599,7 +1599,7 @@ export class ReportBuilder {
   }
 
   public async createReport(report: ReportData, sections: SectionData[], status: string): Promise<string> {
-    moment.locale("id");
+    dayjs().locale("id");
     // Date
     const date: number = Math.floor(Date.now() / 1000);
     // Content Page
@@ -1635,7 +1635,7 @@ export class ReportBuilder {
       activityName: report.activity,
       testCaseId: report.testCase.testCaseId,
       authorName: report.author,
-      date: moment(date * 1000).format("DD-MM-YYYY_HH:mm:ss"),
+      date: dayjs(date * 1000).format("DD-MM-YYYY_HH:mm:ss"),
     };
     await this.createCover(coverData);
 
@@ -1727,7 +1727,7 @@ export class ReportBuilder {
 
     await this.createContent(contentData);
 
-    const fileName = `${status}@${report.testCase.scenarioName}@${report.testCase.testCaseId}@${moment(
+    const fileName = `${status}@${report.testCase.scenarioName}@${report.testCase.testCaseId}@${dayjs(
       date * 1000,
     ).format("DD-MM-YYYY_HH-mm-ss")}.pdf`;
     const output = this.doc.output("arraybuffer");

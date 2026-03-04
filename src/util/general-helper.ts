@@ -9,24 +9,29 @@ export class GeneralHelper {
     }
   }
 
-  static formatZodErrors(error: ZodError) {
+  static formatZodErrors(error: ZodError, fileName: string) {
     return error.errors.map((err) => ({
       errorType: "Tars JSON format error",
       path: err.path.join("."),
       message: err.message,
+      fileName: fileName,
     }));
   }
 
   static output(ok: boolean, msg: unknown) {
-    console.error(
-      JSON.stringify(
-        {
-          ok: ok,
-          message: msg,
-        },
-        null,
-        2,
-      ),
+    const stringifyJson = JSON.stringify(
+      {
+        ok: ok,
+        message: msg,
+      },
+      null,
+      2,
     );
+
+    if (ok) {
+      console.info(stringifyJson);
+    } else {
+      console.error(stringifyJson);
+    }
   }
 }

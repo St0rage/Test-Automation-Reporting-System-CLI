@@ -4,21 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "bundle": "esbuild src/main.ts --bundle --platform=node --outfile=dist/tars-cli.js",
+    "sea": "node --experimental-sea-config sea-config.json",
+    "copy-node-windows": "node -e \"require('fs').copyFileSync(process.execPath, 'dist/tars-cli.exe')\"",
+    "remove-sign-windows": "signtool remove /s dist/tars-cli.exe",
+    "inject-windows": "npx postject dist/tars-cli.exe NODE_SEA_BLOB dist/tars-cli.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2",
+    "clean-windows": "del /Q dist\\tars-cli.blob && del /Q dist\\tars-cli.js",
+    "build-windows": "npm run bundle && npm run sea && npm run copy-node-windows && npm run remove-sign-windows && npm run inject-windows && npm run clean-windows"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "commander": "^14.0.3",
+    "dayjs": "^1.11.19",
     "image-size": "^2.0.2",
     "jspdf": "^4.2.0",
     "jspdf-autotable": "^5.0.7",
-    "moment": "^2.30.1",
-    "sharp": "^0.34.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "esbuild": "^0.27.3",
+    "sharp": "^0.34.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

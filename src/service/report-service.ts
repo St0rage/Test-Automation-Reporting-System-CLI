@@ -7,6 +7,7 @@ import { ReportData, ReportRequest, SectionData } from "../model/model";
 import { ReportBuilder } from "../application/report-builder";
 import { PlainReportBuilder } from "../application/plain-report-builder";
 import { GeneralHelper } from "../util/general-helper";
+import { ZodError } from "zod";
 
 export class ReportService {
   private reportBuilder: ReportBuilder;
@@ -31,10 +32,13 @@ export class ReportService {
       throw new Error(`Failed to read or parse tars JSON file ${jsonPath}`);
     }
 
-    const validatedReportRequest = Validation.validate(
-      ReportValidation.reportReqSchema,
-      reportRequest as ReportRequest,
-    );
+    let validatedReportRequest: ReportRequest;
+    try {
+      validatedReportRequest = Validation.validate(ReportValidation.reportReqSchema, reportRequest as ReportRequest);
+    } catch (e) {
+      const errMsg = GeneralHelper.formatZodErrors(e as ZodError, jsonFileName);
+      throw new Error(JSON.stringify(errMsg));
+    }
 
     const reportData: ReportData = validatedReportRequest.reportData;
     const sectionData: SectionData[] = validatedReportRequest.stepData;
@@ -52,7 +56,10 @@ export class ReportService {
       );
     }
 
-    GeneralHelper.output(true, `Report generated successfully: ${fileName}`);
+    GeneralHelper.output(
+      true,
+      `Report generated successfully: ${fileName?.replace(process.cwd() + "\\", "").replace("\\", "/")}`,
+    );
   }
 
   public async generateTarsFile() {

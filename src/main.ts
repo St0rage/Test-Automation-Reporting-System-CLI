@@ -1,12 +1,11 @@
 process.env.NODE_NO_WARNINGS = "1";
 process.removeAllListeners("warning");
 
-import { ZodError } from "zod";
 import { CLI } from "./application/cli";
+import { PlainReportBuilder } from "./application/plain-report-builder";
+import { ReportBuilder } from "./application/report-builder";
 import { ReportService } from "./service/report-service";
 import { GeneralHelper } from "./util/general-helper";
-import { ReportBuilder } from "./application/report-builder";
-import { PlainReportBuilder } from "./application/plain-report-builder";
 
 async function main() {
   const reportBuilder = new ReportBuilder();
@@ -19,9 +18,7 @@ async function main() {
 main().catch((e) => {
   let errMsg: unknown;
 
-  if (e instanceof ZodError) {
-    errMsg = GeneralHelper.formatZodErrors(e);
-  } else if (e instanceof Error) {
+  if (e instanceof Error) {
     errMsg = GeneralHelper.parseIfJson(e.message);
   } else {
     errMsg = String(e);

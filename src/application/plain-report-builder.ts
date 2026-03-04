@@ -1,9 +1,9 @@
 import { mkdir, writeFile } from "fs/promises";
 import { jsPDF } from "jspdf";
 import autoTable, { CellHookData } from "jspdf-autotable";
-import moment from "moment";
 import path from "path";
 import { ReportData, SectionData } from "../model/model";
+import dayjs from "dayjs";
 
 type CoverData = {
   projectName: string;
@@ -418,7 +418,7 @@ export class PlainReportBuilder {
   private async updateFooter(currentPage: number) {
     const textFontSize = 10;
     const footerPosition = 8;
-    const footerLeftText = `Copyright © (${moment().year()}) by BNI-APS. Testing Strategy Execution Form`;
+    const footerLeftText = `Copyright © (${dayjs().year()}) by BNI-APS. Testing Strategy Execution Form`;
     const footerRightText = `Page ${currentPage} of ${this.page - 1}`;
 
     this.doc.setPage(currentPage);
@@ -1643,7 +1643,7 @@ export class PlainReportBuilder {
   }
 
   public async createReport(report: ReportData, sections: SectionData[], status: string): Promise<string> {
-    moment.locale("id");
+    dayjs.locale("id");
     // Date
     const date: number = Math.floor(Date.now() / 1000);
     // Content Page
@@ -1676,7 +1676,7 @@ export class PlainReportBuilder {
       activityName: report.activity,
       testCaseId: report.testCase.testCaseId,
       authorName: report.author,
-      date: moment(date * 1000).format("DD-MM-YYYY_HH:mm:ss"),
+      date: dayjs(date * 1000).format("DD-MM-YYYY_HH:mm:ss"),
     };
     await this.createCover(coverData);
 
@@ -1747,7 +1747,7 @@ export class PlainReportBuilder {
       await this.updateFooter(i);
     }
 
-    const fileName = `${status}@${report.testCase.scenarioName}@${report.testCase.testCaseId}@${moment(
+    const fileName = `${status}@${report.testCase.scenarioName}@${report.testCase.testCaseId}@${dayjs(
       date * 1000,
     ).format("DD-MM-YYYY_HH-mm-ss")}.pdf`;
     const output = this.doc.output("arraybuffer");
