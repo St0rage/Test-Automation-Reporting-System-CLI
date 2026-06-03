@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "bundle": "esbuild src/main.ts --bundle --platform=node --outfile=dist/tars-cli.js",
+    "bundle": "esbuild src/main.ts --bundle --minify --platform=node --outfile=dist/tars-cli.js",
     "sea": "node --experimental-sea-config sea-config.json",
     "copy-node-windows": "node -e \"require('fs').copyFileSync(process.execPath, 'dist/tars-cli.exe')\"",
     "copy-node": "cp $(command -v node) dist/tars-cli",
