@@ -2,7 +2,7 @@ import path from "path";
 import sharp from "sharp";
 
 async function generate() {
-  const bytes = await sharp(path.join(__dirname, "asset", "report-logo.png"))
+  const bytes = await sharp(path.join(__dirname, "asset", "report-logo-default.png"))
     .png({ quality: 55 })
     .toBuffer();
 

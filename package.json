@@ -7,10 +7,14 @@
     "bundle": "esbuild src/main.ts --bundle --platform=node --outfile=dist/tars-cli.js",
     "sea": "node --experimental-sea-config sea-config.json",
     "copy-node-windows": "node -e \"require('fs').copyFileSync(process.execPath, 'dist/tars-cli.exe')\"",
+    "copy-node": "cp $(command -v node) dist/tars-cli",
     "remove-sign-windows": "signtool remove /s dist/tars-cli.exe",
     "inject-windows": "npx postject dist/tars-cli.exe NODE_SEA_BLOB dist/tars-cli.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2",
+    "inject": "npx postject dist/tars-cli NODE_SEA_BLOB dist/tars-cli.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2",
     "clean-windows": "del /Q dist\\tars-cli.blob && del /Q dist\\tars-cli.js",
-    "build-windows": "npm run bundle && npm run sea && npm run copy-node-windows && npm run remove-sign-windows && npm run inject-windows && npm run clean-windows"
+    "clean": "rm dist/tars-cli.blob && rm dist/tars-cli.js",
+    "build-windows": "npm run bundle && npm run sea && npm run copy-node-windows && npm run remove-sign-windows && npm run inject-windows && npm run clean-windows",
+    "build-linux": "npm run bundle && npm run sea && npm run copy-node && npm run inject && npm run clean"
   },
   "author": "",
   "license": "ISC",
